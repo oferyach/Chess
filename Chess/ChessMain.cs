@@ -168,7 +168,7 @@ namespace Chess
                 }
                 //we check for legal move
                 //temp just move to empty cell
-                if (IsValidMove(i,j) //(BoardP[i,j].piece == (int)Pieces.Empty)
+                if (IsValidMove(i,j)) //(BoardP[i,j].piece == (int)Pieces.Empty)
                 {
                     MsgList.Items.Insert(0,"Do move: "+LastMarki.ToString()+":"+LastMarkj.ToString()+"-->"+i.ToString()+":"+j.ToString());
                     DoMove(LastMarki, LastMarkj, i, j);
