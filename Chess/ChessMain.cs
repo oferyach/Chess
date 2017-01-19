@@ -85,6 +85,7 @@ namespace Chess
                 {
                     BoardP[i, j].L.Text = "";
                     BoardP[i, j].piece = (int)Pieces.Empty;
+                    BoardP[i, j].P.BackColor = BoardP[i, j].MyColor;
                 }
             //now fill
             BoardP[0, 0].L.Text = "♜"; BoardP[0, 0].color = (int)PieceColor.Black; BoardP[0, 0].piece = (int)Pieces.Rook; 
@@ -119,24 +120,36 @@ namespace Chess
             LastMarki = -1;
             TurnOf = (int)PieceColor.White;  // White allways starts
             SelectionMade = false;
+
+            MsgList.Items.Clear();
             
         }
 
 
-        public void MarkValidMoves(Moves moves)
+        public void MarkValidMoves(Moves moves, bool set)
         {
             if (moves == null)
                 return;
             for (int i=0;i< moves.num;i++)
             {
-                BoardP[moves.i[i], moves.j[i]].P.BackColor = Color.SkyBlue;
+                if (set)
+                    BoardP[moves.i[i], moves.j[i]].P.BackColor = Color.SkyBlue;
+                else
+                    BoardP[moves.i[i], moves.j[i]].P.BackColor = BoardP[moves.i[i], moves.j[i]].MyColor;
             }
         }
 
         Moves LastValidMoves = null;
 
-        public bool IsValidMove(int i, int j)
+        public bool IsValidMove(Moves m,int i, int j)
         {
+            if (m == null)
+                return false;
+            for (int ii = 0; ii < m.num; ii++)
+            {
+                if (m.i[ii] == i && m.j[ii] == j)
+                    return true;               
+            }
             return false;
         }
 
@@ -167,8 +180,8 @@ namespace Chess
                     return;
                 }
                 //we check for legal move
-                //temp just move to empty cell
-                if (IsValidMove(i,j)) //(BoardP[i,j].piece == (int)Pieces.Empty)
+                //
+                if (IsValidMove(LastValidMoves,i,j)) 
                 {
                     MsgList.Items.Insert(0,"Do move: "+LastMarki.ToString()+":"+LastMarkj.ToString()+"-->"+i.ToString()+":"+j.ToString());
                     DoMove(LastMarki, LastMarkj, i, j);
@@ -200,8 +213,10 @@ namespace Chess
                     LastMarkj = j;
 
                     //find valid moves for this selection and mark them
-                    Moves m = GetValidMoves(i, j);
-                    MarkValidMoves(m);
+                    LastValidMoves = GetValidMoves(i, j);
+                    if (LastValidMoves.num == 0)
+                        MsgList.Items.Insert(0, "No valid move for selection");
+                    MarkValidMoves(LastValidMoves,true);
                 }
 
             }
@@ -211,6 +226,11 @@ namespace Chess
 
         public void DoMove(int iFrom,int jFrom, int iTo, int jTo)
         {
+
+            //clear marked valid moves
+            MarkValidMoves(LastValidMoves, false);
+
+
             //take piece from pne place and put in other
             BoardP[iTo, jTo].piece = BoardP[iFrom, jFrom].piece;
             BoardP[iTo, jTo].color = BoardP[iFrom, jFrom].color;
@@ -248,17 +268,82 @@ namespace Chess
         public Moves GetValidPawnMoves(int i,int j)
         {
             Moves moves = new Moves();
+            //the max moves pawn can have are 4
+            moves.i = new int[4];
+            moves.j = new int[4];
 
-            moves.num = 0;
-            moves.i = new int[3];
-            moves.j = new int[3];
-
-            for (int ii = 0; ii < 3; ii++ )
+            // a white pawn will move down myboard
+            
+            if (BoardP[i,j].color == (int)PieceColor.White )
             {
-                moves.num++;
-                moves.i[ii] = ii;
-                moves.j[ii] = ii;  
+                if (j == 0) //on last row no moves
+                    return moves; 
+                // pawn will move 'up' if free
+                if (BoardP[i,j-1].piece == (int)Pieces.Empty)
+                {
+                    moves.i[moves.num] = i;
+                    moves.j[moves.num] = j -1;
+                    moves.num++;
+                    //up was free check if we are on second line and 4 line is free
+                    if (j == 6 && BoardP[i,j-2].piece == (int)Pieces.Empty)
+                    {
+                        moves.i[moves.num] = i;
+                        moves.j[moves.num] = j - 2;
+                        moves.num++;
+                    }
+                }
+                //check if can eat on each side
+                //can it eat to the left
+                if (i > 0 && j < 7 && BoardP[i - 1, j - 1].piece != (int)Pieces.Empty && BoardP[i -1, j - 1].color != (int)PieceColor.White)
+                {
+                    moves.i[moves.num] = i - 1;
+                    moves.j[moves.num] = j - 1;
+                    moves.num++;
+                }
+                //can it eat to the rigth
+                if (i < 7 && j < 7 && BoardP[i + 1, j - 1].piece != (int)Pieces.Empty && BoardP[i + 1, j - 1].color != (int)PieceColor.White)
+                {
+                    moves.i[moves.num] = i + 1;
+                    moves.j[moves.num] = j - 1;
+                    moves.num++;
+                }
+
             }
+            else 
+            {
+                if (j == 7)
+                    return moves;
+                // pawn will move 'up' if free
+                if (BoardP[i, j + 1].piece == (int)Pieces.Empty)
+                {
+                    moves.i[moves.num] = i;
+                    moves.j[moves.num] = j + 1;
+                    moves.num++;
+                    //up was free check if we are on second line and 4 line is free
+                    if (j == 1 && BoardP[i, j + 2].piece == (int)Pieces.Empty && BoardP[i, j + 1].color != (int)PieceColor.White)
+                    {
+                        moves.i[moves.num] = i;
+                        moves.j[moves.num] = j + 2;
+                        moves.num++;
+                    }
+                }
+                //check if can eat on each side
+                //can it eat to the left
+                if (i > 0 && j < 7 && BoardP[i - 1, j - 1].piece != (int)Pieces.Empty && BoardP[i, j + 1].color != (int)PieceColor.Black)
+                {
+                    moves.i[moves.num] = i - 1;
+                    moves.j[moves.num] = j - 1;
+                    moves.num++;
+                }
+                //can it eat to the rigth
+                if (i < 7 && j < 7 && BoardP[i + 1, j - 1].piece != (int)Pieces.Empty && BoardP[i, j + 1].color != (int)PieceColor.Black)
+                {
+                    moves.i[moves.num] = i + 1;
+                    moves.j[moves.num] = j - 1;
+                    moves.num++;
+                }
+            }
+            
 
             return moves;
 
