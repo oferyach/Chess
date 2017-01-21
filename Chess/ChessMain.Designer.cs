@@ -48,6 +48,8 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.MsgList = new System.Windows.Forms.ListBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.MoveCol = new System.Windows.Forms.Panel();
             this.BoardPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -248,11 +250,31 @@
             this.MsgList.Size = new System.Drawing.Size(186, 199);
             this.MsgList.TabIndex = 18;
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(848, 13);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(49, 13);
+            this.label17.TabIndex = 19;
+            this.label17.Text = "Move of:";
+            // 
+            // MoveCol
+            // 
+            this.MoveCol.BackColor = System.Drawing.Color.White;
+            this.MoveCol.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.MoveCol.Location = new System.Drawing.Point(916, 13);
+            this.MoveCol.Name = "MoveCol";
+            this.MoveCol.Size = new System.Drawing.Size(44, 12);
+            this.MoveCol.TabIndex = 20;
+            // 
             // ChessMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1046, 836);
+            this.Controls.Add(this.MoveCol);
+            this.Controls.Add(this.label17);
             this.Controls.Add(this.MsgList);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
@@ -302,6 +324,8 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.ListBox MsgList;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Panel MoveCol;
     }
 }
 

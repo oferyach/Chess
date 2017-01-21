@@ -8,13 +8,14 @@ using System.Drawing;
 
 namespace Chess
 {
-    class Board
+    public class Board
     {
         public Label L;
         public Panel P;
         public Color MyColor;
         public int color;
-        public int piece;
+        public Pieces piece { get; set; }
+        public PicesBase PB;
     }
 
     public enum Pieces { Pawn, Knight, Bishop, Rook, Queen, King,Empty };

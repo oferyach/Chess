@@ -51,8 +51,15 @@
     <Compile Include="ChessMain.Designer.cs">
       <DependentUpon>ChessMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="PicesBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="P_Bishop.cs" />
+    <Compile Include="P_King.cs" />
+    <Compile Include="P_Knight.cs" />
+    <Compile Include="P_Pawn.cs" />
+    <Compile Include="P_Queen.cs" />
+    <Compile Include="P_Rook.cs" />
     <EmbeddedResource Include="ChessMain.resx">
       <DependentUpon>ChessMain.cs</DependentUpon>
     </EmbeddedResource>
