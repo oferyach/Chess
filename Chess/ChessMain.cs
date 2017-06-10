@@ -263,7 +263,7 @@ namespace Chess
 
             moves.num = 0;
             moves = BoardP[i, j].PB.GetAllowedMoves(BoardP, i, j);
-            /*
+            /* h
             switch (BoardP[i,j].piece)
             {
                 case Pieces.Pawn:
